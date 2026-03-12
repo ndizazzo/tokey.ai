@@ -1,0 +1,23 @@
+id: cpu-13700k
+name: i7-13700K
+description: 32 GB
+category: cpu
+thinkingEnabled: false
+
+tokensPerSec: 12
+ttft: 2500
+jitter: 12
+completionLength: 400
+promptLength: 32768
+networkVariability: false
+
+cadence:
+  stepSize: 2
+  intraStepDelay: 2
+  interStepDelay: 83
+
+stalls:
+  enabled: true
+  probabilityPerSecond: 0.02
+  minDuration: 500
+  maxDuration: 2000

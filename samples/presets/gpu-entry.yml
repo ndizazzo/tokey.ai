@@ -1,0 +1,23 @@
+id: gpu-entry
+name: RTX 3070
+description: 8 GB
+category: gpu
+thinkingEnabled: false
+
+tokensPerSec: 35
+ttft: 2000
+jitter: 10
+completionLength: 300
+promptLength: 4096
+networkVariability: false
+
+cadence:
+  stepSize: 2
+  intraStepDelay: 2
+  interStepDelay: 85
+
+stalls:
+  enabled: true
+  probabilityPerSecond: 0.08
+  minDuration: 200
+  maxDuration: 3000

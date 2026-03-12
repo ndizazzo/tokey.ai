@@ -1,0 +1,14 @@
+id: custom
+name: Custom
+description: Upload your own text file
+tooltip: Upload a custom file to use for simulation content
+
+stages:
+  - prompt: >-
+      Analyze the following document and provide a detailed response based on its content and
+      structure.
+    thinkingText: >-
+      I should mirror the structure, pacing, and tone of the provided harness so the streamed
+      response feels faithful to the source material.
+    responseText: >-
+      You are using a custom text harness. Please upload a file to see the simulation.

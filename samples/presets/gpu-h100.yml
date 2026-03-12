@@ -1,0 +1,23 @@
+id: gpu-h100
+name: H100
+description: 80 GB
+category: gpu
+thinkingEnabled: true
+
+tokensPerSec: 200
+ttft: 80
+jitter: 2
+completionLength: 1000
+promptLength: 524288
+networkVariability: false
+
+cadence:
+  stepSize: 5
+  intraStepDelay: 1
+  interStepDelay: 15
+
+stalls:
+  enabled: false
+  probabilityPerSecond: 0
+  minDuration: 200
+  maxDuration: 2000

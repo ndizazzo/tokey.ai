@@ -1,0 +1,23 @@
+id: standard-api
+name: Standard API
+description: Cloud API (OpenAI, Anthropic)
+category: api
+thinkingEnabled: true
+
+tokensPerSec: 60
+ttft: 500
+jitter: 15
+completionLength: 500
+promptLength: 131072
+networkVariability: true
+
+cadence:
+  stepSize: 3
+  intraStepDelay: 2
+  interStepDelay: 50
+
+stalls:
+  enabled: true
+  probabilityPerSecond: 0.03
+  minDuration: 200
+  maxDuration: 2000

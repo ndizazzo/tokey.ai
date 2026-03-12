@@ -1,0 +1,23 @@
+id: gpu-high
+name: RTX 5090
+description: 32 GB
+category: gpu
+thinkingEnabled: true
+
+tokensPerSec: 100
+ttft: 400
+jitter: 6
+completionLength: 500
+promptLength: 65536
+networkVariability: false
+
+cadence:
+  stepSize: 3
+  intraStepDelay: 1
+  interStepDelay: 30
+
+stalls:
+  enabled: false
+  probabilityPerSecond: 0
+  minDuration: 200
+  maxDuration: 2000

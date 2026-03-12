@@ -1,0 +1,23 @@
+id: gpu-h200
+name: H200
+description: 141 GB
+category: gpu
+thinkingEnabled: true
+
+tokensPerSec: 250
+ttft: 50
+jitter: 1
+completionLength: 1200
+promptLength: 1048576
+networkVariability: false
+
+cadence:
+  stepSize: 6
+  intraStepDelay: 1
+  interStepDelay: 12
+
+stalls:
+  enabled: false
+  probabilityPerSecond: 0
+  minDuration: 200
+  maxDuration: 2000

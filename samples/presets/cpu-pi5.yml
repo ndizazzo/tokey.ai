@@ -1,0 +1,23 @@
+id: cpu-pi5
+name: Raspberry Pi 5
+description: 8 GB
+category: cpu
+thinkingEnabled: false
+
+tokensPerSec: 2
+ttft: 6000
+jitter: 25
+completionLength: 150
+promptLength: 2048
+networkVariability: false
+
+cadence:
+  stepSize: 1
+  intraStepDelay: 2
+  interStepDelay: 500
+
+stalls:
+  enabled: true
+  probabilityPerSecond: 0.1
+  minDuration: 1500
+  maxDuration: 3500

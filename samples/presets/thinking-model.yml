@@ -1,0 +1,23 @@
+id: thinking-model
+name: Thinking Model
+description: Reasoning model with long TTFT
+category: model
+thinkingEnabled: true
+
+tokensPerSec: 30
+ttft: 5000
+jitter: 12
+completionLength: 800
+promptLength: 131072
+networkVariability: true
+
+cadence:
+  stepSize: 2
+  intraStepDelay: 2
+  interStepDelay: 33
+
+stalls:
+  enabled: true
+  probabilityPerSecond: 0.05
+  minDuration: 200
+  maxDuration: 2000
