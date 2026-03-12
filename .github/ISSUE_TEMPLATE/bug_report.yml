@@ -1,0 +1,111 @@
+name: 🐛 Bug Report
+description: Something is broken or behaving unexpectedly
+labels: ["bug", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report. The more detail you provide, the faster we can triage and fix it.
+        
+        **Before filing:** please [search existing issues](../../issues) to check if this has already been reported.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected Component
+      description: Which part of the Tokey platform is affected?
+      options:
+        - web (React frontend)
+        - backend (Hono API)
+        - tui (Terminal UI)
+        - agent (Benchmark runner)
+        - simulator (Inference engine)
+        - core (Shared utilities)
+        - multiple components
+        - unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: "When I do X, Y happens instead of Z."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Exact steps to reproduce the behaviour.
+      placeholder: |
+        1. Start the app with `pnpm dev`
+        2. Navigate to '...'
+        3. Click on '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behaviour
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behaviour
+      description: What actually happened? Include error messages and stack traces if available.
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Fill in relevant details.
+      value: |
+        - **OS**: 
+        - **Node.js version**: 
+        - **pnpm version**: 
+        - **Browser** (if web): 
+        - **Tokey version / commit**: 
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - critical (data loss / crashes / security)
+        - high (core feature broken)
+        - medium (feature degraded, workaround exists)
+        - low (cosmetic / minor inconvenience)
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Screenshots, logs, links to related issues, or anything else that might help.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues and this is not a duplicate
+          required: true
+        - label: I provided enough detail to reproduce the issue
+          required: true
