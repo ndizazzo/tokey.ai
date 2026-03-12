@@ -39,6 +39,4 @@ The most valuable contribution you can make right now is a well-written bug repo
 
 Issues without sufficient information to reproduce or evaluate may be closed after 14 days of no response.
 
-## Code of Conduct
 
-All interactions in this repository are governed by our [Code of Conduct](CODE_OF_CONDUCT.md).
