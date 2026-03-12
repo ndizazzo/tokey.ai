@@ -1,6 +1,6 @@
 name: 💡 Feature Request
 description: Propose a new capability or improvement to Tokey
-labels: ["enhancement", "triage"]
+labels: ["feature"]
 assignees: []
 
 body:
