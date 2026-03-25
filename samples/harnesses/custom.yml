@@ -1,7 +1,7 @@
 id: custom
 name: Custom
-description: Upload your own text file
-tooltip: Upload a custom file to use for simulation content
+description: Use your own text file
+tooltip: Select a custom file to use for simulation content
 
 stages:
   - prompt: >-
@@ -11,4 +11,4 @@ stages:
       I should mirror the structure, pacing, and tone of the provided harness so the streamed
       response feels faithful to the source material.
     responseText: >-
-      You are using a custom text harness. Please upload a file to see the simulation.
+      You are using a custom text harness. Please select a file to see the simulation.

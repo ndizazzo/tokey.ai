@@ -1,0 +1,25 @@
+id: dense-model
+name: Dense Model
+description: All parameters active per token, steady metronomic output
+category: model
+reasoningEffort: off
+reasoningStyle: streamed
+
+tokensPerSec: 42
+ttft: 200
+prefillTps: 55000
+jitter: 3
+completionLength: 600
+promptLength: 131072
+networkVariability: false
+
+cadence:
+  stepSize: 3
+  intraStepDelay: 1
+  interStepDelay: 71
+
+stalls:
+  enabled: false
+  probabilityPerSecond: 0
+  minDuration: 200
+  maxDuration: 2000

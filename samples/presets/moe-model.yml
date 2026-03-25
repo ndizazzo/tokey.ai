@@ -1,0 +1,25 @@
+id: moe-model
+name: MoE Model
+description: Intermittently stalls as experts are loaded
+category: model
+reasoningEffort: off
+reasoningStyle: streamed
+
+tokensPerSec: 90
+ttft: 150
+prefillTps: 90000
+jitter: 15
+completionLength: 600
+promptLength: 131072
+networkVariability: false
+
+cadence:
+  stepSize: 4
+  intraStepDelay: 1
+  interStepDelay: 28
+
+stalls:
+  enabled: true
+  probabilityPerSecond: 0.12
+  minDuration: 100
+  maxDuration: 500

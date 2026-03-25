@@ -2,10 +2,12 @@ id: cpu-pi5
 name: Raspberry Pi 5
 description: 8 GB
 category: cpu
-thinkingEnabled: false
+reasoningEffort: off
+reasoningStyle: streamed
 
 tokensPerSec: 2
-ttft: 6000
+ttft: 1000
+prefillTps: 250
 jitter: 25
 completionLength: 150
 promptLength: 2048

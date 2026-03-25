@@ -2,10 +2,12 @@ id: gpu-h200
 name: H200
 description: 141 GB
 category: gpu
-thinkingEnabled: true
+reasoningEffort: medium
+reasoningStyle: streamed
 
 tokensPerSec: 250
-ttft: 50
+ttft: 30
+prefillTps: 250000
 jitter: 1
 completionLength: 1200
 promptLength: 1048576

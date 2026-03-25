@@ -16,7 +16,7 @@ This repository is the issue tracker for the platform. There is no code here. If
 
 The [`samples/`](samples/) directory contains the simulator's built-in configurations as plain YAML, in case you want to reference them, fork them, or understand what drives a particular preset.
 
-**[`samples/presets/`](samples/presets/)** — The 11 named presets available in the UI, covering GPUs (RTX 3070 through H200), cloud APIs, CPU inference (Pi 5, i7-13700K, Threadripper), bad network conditions, and thinking models. Each file contains the full `SimulationConfig`: tokens per second, TTFT, jitter, prompt and completion length, cadence batching, and stall settings.
+**[`samples/presets/`](samples/presets/)** — The 14 named presets available in the UI, covering GPUs (RTX 3070 through H200), cloud APIs, CPU inference (Pi 5, i7-13700K, Ryzen 9 9950X3D, Threadripper Pro), and model-type presets (MoE, Reasoning, Multimodal, Dense). Each file contains the full `SimulationConfig`: tokens per second, TTFT, prefill throughput, jitter, prompt and completion length, cadence batching, and stall settings.
 
 **[`samples/harnesses/`](samples/harnesses/)** — The five content harnesses used to drive the simulator: code generation (a multi-turn Go task engine implementation), creative writing (a Paris short story), emails & business communication, conversational chat (a TypeScript walkthrough), and the custom harness placeholder. Each file contains the full multi-turn stage content — prompts, thinking text, and response text — exactly as used in the app.
 

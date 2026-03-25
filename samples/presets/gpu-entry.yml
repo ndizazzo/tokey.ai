@@ -2,10 +2,12 @@ id: gpu-entry
 name: RTX 3070
 description: 8 GB
 category: gpu
-thinkingEnabled: false
+reasoningEffort: off
+reasoningStyle: streamed
 
 tokensPerSec: 35
-ttft: 2000
+ttft: 300
+prefillTps: 3000
 jitter: 10
 completionLength: 300
 promptLength: 4096

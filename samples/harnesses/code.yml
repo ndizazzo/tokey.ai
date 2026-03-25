@@ -5,20 +5,21 @@ tooltip: Code-style output with syntax highlighting patterns and structured expl
 
 stages:
   - prompt: >-
-      I'm designing a Go task execution engine where actions have lifecycle hooks — BeforeExecute,
-      Execute, AfterExecute — and pass data between each other through a shared global context.
-      I need the core interfaces, a base action with sensible defaults, a thread-safe global context
-      for storing outputs, and a generic action wrapper that tracks execution timing. Show me the
-      full implementation.
+      I'm designing a Go task execution engine where actions have lifecycle
+      hooks — BeforeExecute, Execute, AfterExecute — and pass data between each
+      other through a shared global context. I need the core interfaces, a base
+      action with sensible defaults, a thread-safe global context for storing
+      outputs, and a generic action wrapper that tracks execution timing. Show
+      me the full implementation.
     thinkingText: >-
-      The user needs the foundational layer of a task engine. I should start with the ActionInterface
-      contract defining the lifecycle hooks, then build a composable BaseAction with no-op defaults,
-      a thread-safe GlobalContext using sync.RWMutex for cross-action data passing, and a generic
-      Action[T] wrapper with execution timing. Go generics are the right fit for preserving concrete
-      types through the wrapper.
+      The user needs the foundational layer of a task engine. I should start
+      with the ActionInterface contract defining the lifecycle hooks, then build
+      a composable BaseAction with no-op defaults, a thread-safe GlobalContext
+      using sync.RWMutex for cross-action data passing, and a generic Action[T]
+      wrapper with execution timing. Go generics are the right fit for
+      preserving concrete types through the wrapper.
     responseText: |
-      Here is the foundational action layer. The design uses Go generics to wrap user-defined actions
-      with lifecycle tracking while keeping the interface minimal:
+      Here is the foundational action layer. The design uses Go generics to wrap user-defined actions with lifecycle tracking while keeping the interface minimal:
 
       ```go
       package task_engine
@@ -89,22 +90,121 @@ stages:
         defer gc.mu.Unlock()
         gc.ActionOutputs[id] = output
       }
+
+      func (gc *GlobalContext) StoreTaskOutput(id string, output interface{}) {
+        gc.mu.Lock()
+        defer gc.mu.Unlock()
+        gc.TaskOutputs[id] = output
+      }
+
+      func ActionResultAs[T any](gc *GlobalContext, actionID string) (T, bool) {
+        gc.mu.RLock()
+        rp, ok := gc.ActionResults[actionID]
+        gc.mu.RUnlock()
+        var zero T
+        if !ok || rp == nil {
+          return zero, false
+        }
+        v, ok := rp.GetResult().(T)
+        return v, ok
+      }
       ```
 
+      Finally, the generic `Action[T]` wrapper handles execution timing, UUID-based run tracking, and the full before/execute/after lifecycle:
+
+      ```go
+      type ActionWrapper interface {
+        Execute(ctx context.Context) error
+        GetDuration() time.Duration
+        GetLogger() *slog.Logger
+        GetID() string
+        SetID(string)
+        GetName() string
+        GetOutput() interface{}
+      }
+
+      type Action[T ActionInterface] struct {
+        ID        string
+        Name      string
+        RunID     string
+        Wrapped   T
+        StartTime time.Time
+        EndTime   time.Time
+        Duration  time.Duration
+        Logger    *slog.Logger
+        mu        sync.RWMutex
+      }
+
+      func NewAction[T ActionInterface](wrapped T, name string, logger *slog.Logger, id ...string) *Action[T] {
+        actionID := ""
+        if len(id) > 0 && strings.TrimSpace(id[0]) != "" {
+          actionID = id[0]
+        } else if strings.TrimSpace(name) != "" {
+          actionID = generateIDFromName(name)
+        }
+        return &Action[T]{
+          ID: actionID, Name: name, Wrapped: wrapped, Logger: logger,
+        }
+      }
+
+      func (a *Action[T]) Execute(ctx context.Context) error {
+        a.mu.Lock()
+        a.RunID = uuid.New().String()
+        a.StartTime = time.Now()
+        a.mu.Unlock()
+
+        execCtx := ctx
+        if _, ok := ctx.Value(GlobalContextKey).(*GlobalContext); !ok {
+          execCtx = context.WithValue(ctx, GlobalContextKey, NewGlobalContext())
+        }
+
+        if err := a.Wrapped.BeforeExecute(execCtx); err != nil {
+          return fmt.Errorf("before execute: %w", err)
+        }
+        if err := a.Wrapped.Execute(execCtx); err != nil {
+          return fmt.Errorf("execute: %w", err)
+        }
+
+        a.mu.Lock()
+        a.EndTime = time.Now()
+        a.Duration = a.EndTime.Sub(a.StartTime)
+        a.mu.Unlock()
+
+        return a.Wrapped.AfterExecute(execCtx)
+      }
+
+      func (a *Action[T]) GetOutput() interface{} {
+        if out, ok := any(a.Wrapped).(interface{ GetOutput() interface{} }); ok {
+          return out.GetOutput()
+        }
+        return nil
+      }
+      ```
+
+      Key design choices:
+
+      - **Composition over inheritance**: `BaseAction` is embedded, not subclassed
+      - **Generics for type safety**: `Action[T]` preserves the concrete action type through the wrapper
+      - **Mutex-protected context**: All `GlobalContext` methods are goroutine-safe
+      - **Automatic fallbacks**: Missing IDs are derived from names, nil loggers go to `io.Discard`
+
   - prompt: >-
-      Now I need a parameter resolution system. Actions should declare dependencies on outputs from
-      other actions or tasks, resolve them at runtime from the global context, and I want type-safe
-      resolution helpers. Give me the parameter interface, implementations for static values, action
-      outputs, task results, and typed resolution functions with shorthand constructors.
+      Now I need a parameter resolution system. Actions should declare
+      dependencies on outputs from other actions or tasks, resolve them at
+      runtime from the global context, and I want type-safe resolution helpers.
+      Give me the parameter interface, implementations for static values, action
+      outputs, task results, and typed resolution functions with shorthand
+      constructors.
     thinkingText: >-
-      This builds on the GlobalContext from the previous step. The ActionParameter interface needs a
-      Resolve method that takes a GlobalContext and returns a value. I need concrete implementations
-      for static values, action output references with optional key extraction, and task result
-      references. Typed helpers like ResolveString and a generic ResolveAs keep the consumer code
-      clean. Shorthand constructors reduce boilerplate at the call site.
+      This builds on the GlobalContext from the previous step. The
+      ActionParameter interface needs a Resolve method that takes a
+      GlobalContext and returns a value. I need concrete implementations for
+      static values, action output references with optional key extraction, and
+      task result references. Typed helpers like ResolveString and a generic
+      ResolveAs keep the consumer code clean. Shorthand constructors reduce
+      boilerplate at the call site.
     responseText: |
-      Here is the parameter resolution system that enables runtime dependency injection between actions
-      and tasks:
+      Here is the parameter resolution system that enables runtime dependency injection between actions and tasks:
 
       ```go
       package task_engine
@@ -162,18 +262,156 @@ stages:
 
         return output, nil
       }
+
+      // TaskResultParameter references results from tasks implementing ResultProvider.
+      type TaskResultParameter struct {
+        TaskID    string
+        ResultKey string
+      }
+
+      func (p TaskResultParameter) Resolve(ctx context.Context, gc *GlobalContext) (interface{}, error) {
+        if gc == nil {
+          return nil, fmt.Errorf("globalContext is nil")
+        }
+
+        gc.mu.RLock()
+        rp, exists := gc.TaskResults[p.TaskID]
+        gc.mu.RUnlock()
+
+        if !exists {
+          return nil, fmt.Errorf("task %q not found in context", p.TaskID)
+        }
+
+        result := rp.GetResult()
+        if p.ResultKey != "" {
+          resultMap, ok := result.(map[string]interface{})
+          if !ok {
+            return nil, fmt.Errorf("task %q result is not a map", p.TaskID)
+          }
+          value, exists := resultMap[p.ResultKey]
+          if !exists {
+            return nil, fmt.Errorf("key %q not found in task %q result", p.ResultKey, p.TaskID)
+          }
+          return value, nil
+        }
+
+        return result, nil
+      }
       ```
 
+      The typed resolution helpers keep consumer code clean and provide ergonomic access to parameter values:
+
+      ```go
+      // ResolveString resolves an ActionParameter to a string value.
+      func ResolveString(ctx context.Context, p ActionParameter, gc *GlobalContext) (string, error) {
+        if p == nil {
+          return "", nil
+        }
+        v, err := p.Resolve(ctx, gc)
+        if err != nil {
+          return "", err
+        }
+        switch t := v.(type) {
+        case string:
+          return t, nil
+        case []byte:
+          return string(t), nil
+        case fmt.Stringer:
+          return t.String(), nil
+        default:
+          return "", fmt.Errorf("parameter resolved to %T, not string", v)
+        }
+      }
+
+      // ResolveBool resolves an ActionParameter to a bool with common coercions.
+      func ResolveBool(ctx context.Context, p ActionParameter, gc *GlobalContext) (bool, error) {
+        if p == nil {
+          return false, nil
+        }
+        v, err := p.Resolve(ctx, gc)
+        if err != nil {
+          return false, err
+        }
+        switch t := v.(type) {
+        case bool:
+          return t, nil
+        case string:
+          s := strings.TrimSpace(strings.ToLower(t))
+          switch s {
+          case "true", "1", "yes":
+            return true, nil
+          case "false", "0", "no":
+            return false, nil
+          default:
+            return false, fmt.Errorf("cannot convert %q to bool", t)
+          }
+        case int:
+          return t != 0, nil
+        default:
+          return false, fmt.Errorf("parameter resolved to %T, not bool", v)
+        }
+      }
+
+      // ResolveAs provides a generic typed resolver for any target type.
+      func ResolveAs[T any](ctx context.Context, p ActionParameter, gc *GlobalContext) (T, error) {
+        var zero T
+        if p == nil {
+          return zero, nil
+        }
+        v, err := p.Resolve(ctx, gc)
+        if err != nil {
+          return zero, err
+        }
+        out, ok := v.(T)
+        if !ok {
+          return zero, fmt.Errorf("expected %T, got %T", zero, v)
+        }
+        return out, nil
+      }
+      ```
+
+      Shorthand constructors reduce boilerplate when wiring parameters:
+
+      ```go
+      func ActionOutput(actionID string) ActionOutputParameter {
+        return ActionOutputParameter{ActionID: actionID}
+      }
+
+      func ActionOutputField(actionID, field string) ActionOutputParameter {
+        return ActionOutputParameter{ActionID: actionID, OutputKey: field}
+      }
+
+      func TaskResult(taskID string) TaskResultParameter {
+        return TaskResultParameter{TaskID: taskID}
+      }
+
+      func TaskResultField(taskID, field string) TaskResultParameter {
+        return TaskResultParameter{TaskID: taskID, ResultKey: field}
+      }
+
+      func TaskOutput(taskID string) TaskOutputParameter {
+        return TaskOutputParameter{TaskID: taskID}
+      }
+
+      func TaskOutputField(taskID, field string) TaskOutputParameter {
+        return TaskOutputParameter{TaskID: taskID, OutputKey: field}
+      }
+      ```
+
+      The pattern makes parameter wiring declarative — actions express what they need, and the engine resolves it at runtime from the shared `GlobalContext`.
+
   - prompt: >-
-      Finally, show me the Task struct that orchestrates sequential action execution. It should support
-      cancellation via context, store outputs after each action completes, validate parameters before
-      starting, and implement a ResultProvider interface. Also include a TaskManager that runs tasks as
+      Finally, show me the Task struct that orchestrates sequential action
+      execution. It should support cancellation via context, store outputs after
+      each action completes, validate parameters before starting, and implement
+      a ResultProvider interface. Also include a TaskManager that runs tasks as
       goroutines with handles for tracking completion.
     thinkingText: >-
-      The Task struct ties everything together: sequential action execution with context-based
-      cancellation, automatic output storage after each action for downstream parameter resolution,
-      and pre-flight validation of action IDs. A ResultBuilder callback enables custom aggregation.
-      The TaskManager wraps each task run in a goroutine with a cancel function and uses a WaitGroup
+      The Task struct ties everything together: sequential action execution with
+      context-based cancellation, automatic output storage after each action for
+      downstream parameter resolution, and pre-flight validation of action IDs.
+      A ResultBuilder callback enables custom aggregation. The TaskManager wraps
+      each task run in a goroutine with a cancel function and uses a WaitGroup
       for coordinated shutdown.
     responseText: |
       Here is the task execution engine and manager that ties everything together:
@@ -194,6 +432,7 @@ stages:
 
       var ErrPrerequisiteNotMet = errors.New("task prerequisite not met")
 
+      // Task represents a sequential pipeline of actions with shared context.
       type Task struct {
         ID             string
         RunID          string
@@ -208,6 +447,16 @@ stages:
         ResultBuilder  func(ctx *TaskContext) (interface{}, error)
       }
 
+      type TaskContext struct {
+        TaskID        string
+        GlobalContext *GlobalContext
+        Logger        *slog.Logger
+      }
+
+      func NewTaskContext(taskID string, gc *GlobalContext, logger *slog.Logger) *TaskContext {
+        return &TaskContext{TaskID: taskID, GlobalContext: gc, Logger: logger}
+      }
+
       func (t *Task) RunWithContext(ctx context.Context, globalContext *GlobalContext) error {
         t.mu.Lock()
         t.RunID = uuid.New().String()
@@ -217,6 +466,8 @@ stages:
           globalContext = NewGlobalContext()
         }
 
+        taskContext := NewTaskContext(t.ID, globalContext, t.Logger)
+
         if err := t.validateParameters(); err != nil {
           return fmt.Errorf("task %s parameter validation failed: %w", t.ID, err)
         }
@@ -225,19 +476,205 @@ stages:
           select {
           case <-ctx.Done():
             t.SetError(ctx.Err())
+            t.storeTaskOutput(globalContext)
             return ctx.Err()
           default:
             actionCtx := context.WithValue(ctx, GlobalContextKey, globalContext)
             if err := action.Execute(actionCtx); err != nil {
               t.SetError(err)
+              t.storeTaskOutput(globalContext)
               if errors.Is(err, ErrPrerequisiteNotMet) {
                 return fmt.Errorf("task %s aborted at action %s: %w", t.ID, action.GetID(), err)
               }
-              return err
+              return fmt.Errorf("task %s failed at action %s: %w", t.ID, action.GetID(), err)
             }
-            globalContext.StoreActionOutput(action.GetID(), action.GetOutput())
+
+            t.storeActionOutput(action, globalContext)
+          }
+
+          t.mu.Lock()
+          t.TotalTime += action.GetDuration()
+          t.CompletedTasks++
+          t.mu.Unlock()
+        }
+
+        if t.ResultBuilder != nil {
+          if res, err := t.ResultBuilder(taskContext); err != nil {
+            t.SetError(err)
+          } else if res != nil {
+            t.SetResult(res)
+          }
+        }
+
+        t.storeTaskOutput(globalContext)
+        return nil
+      }
+      ```
+
+      Output storage and validation ensure the pipeline is well-formed before execution begins:
+
+      ```go
+      func (t *Task) storeActionOutput(action ActionWrapper, gc *GlobalContext) {
+        actionID := action.GetID()
+        if output, ok := action.(interface{ GetOutput() interface{} }); ok {
+          if v := output.GetOutput(); v != nil {
+            gc.StoreActionOutput(actionID, v)
+          }
+        }
+        if rp, ok := action.(ResultProvider); ok {
+          gc.StoreActionResult(actionID, rp)
+        }
+      }
+
+      func (t *Task) storeTaskOutput(gc *GlobalContext) {
+        gc.StoreTaskOutput(t.ID, map[string]interface{}{
+          "taskID":         t.ID,
+          "runID":          t.RunID,
+          "name":           t.Name,
+          "totalTime":      t.TotalTime,
+          "completedTasks": t.CompletedTasks,
+          "success":        t.GetError() == nil,
+        })
+      }
+
+      func (t *Task) validateParameters() error {
+        for i, action := range t.Actions {
+          actionID := action.GetID()
+          if actionID == "" {
+            return fmt.Errorf("action %d has empty ID", i)
+          }
+          for j := 0; j < i; j++ {
+            if t.Actions[j].GetID() == actionID {
+              return fmt.Errorf("duplicate action ID %q at index %d and %d", actionID, j, i)
+            }
           }
         }
         return nil
       }
+
+      func (t *Task) GetResult() interface{} {
+        t.mu.Lock()
+        defer t.mu.Unlock()
+        if t.customResult != nil {
+          return t.customResult
+        }
+        return map[string]interface{}{
+          "taskID":    t.ID,
+          "runID":     t.RunID,
+          "name":      t.Name,
+          "totalTime": t.TotalTime,
+          "success":   t.executionError == nil,
+        }
+      }
+
+      func (t *Task) SetResult(result interface{}) {
+        t.mu.Lock()
+        defer t.mu.Unlock()
+        t.customResult = result
+      }
+
+      func (t *Task) SetError(err error) {
+        t.mu.Lock()
+        defer t.mu.Unlock()
+        t.executionError = err
+      }
+
+      func (t *Task) GetError() error {
+        t.mu.Lock()
+        defer t.mu.Unlock()
+        return t.executionError
+      }
       ```
+
+      The `TaskManager` runs tasks as goroutines and provides handles for tracking completion:
+
+      ```go
+      type TaskHandle struct {
+        taskID string
+        done   chan struct{}
+        err    error
+        mu     sync.Mutex
+      }
+
+      func (h *TaskHandle) Done() <-chan struct{} { return h.done }
+      func (h *TaskHandle) Err() error {
+        h.mu.Lock()
+        defer h.mu.Unlock()
+        return h.err
+      }
+
+      type TaskManager struct {
+        Tasks         map[string]*Task
+        runningTasks  map[string]context.CancelFunc
+        Logger        *slog.Logger
+        mu            sync.Mutex
+        wg            sync.WaitGroup
+        globalContext *GlobalContext
+      }
+
+      func NewTaskManager(logger *slog.Logger) *TaskManager {
+        return &TaskManager{
+          Tasks:         make(map[string]*Task),
+          runningTasks:  make(map[string]context.CancelFunc),
+          Logger:        logger,
+          globalContext: NewGlobalContext(),
+        }
+      }
+
+      func (tm *TaskManager) RunTask(taskID string) (*TaskHandle, error) {
+        tm.mu.Lock()
+        defer tm.mu.Unlock()
+
+        task, exists := tm.Tasks[taskID]
+        if !exists {
+          return nil, fmt.Errorf("task %q not found", taskID)
+        }
+
+        ctx, cancel := context.WithCancel(context.Background())
+        tm.runningTasks[taskID] = cancel
+
+        handle := &TaskHandle{taskID: taskID, done: make(chan struct{})}
+        tm.wg.Add(1)
+
+        go func() {
+          defer tm.wg.Done()
+          defer close(handle.done)
+          defer func() {
+            tm.mu.Lock()
+            delete(tm.runningTasks, taskID)
+            tm.mu.Unlock()
+          }()
+
+          err := task.RunWithContext(ctx, tm.globalContext)
+          handle.mu.Lock()
+          handle.err = err
+          handle.mu.Unlock()
+        }()
+
+        return handle, nil
+      }
+
+      func (tm *TaskManager) WaitForAllTasks(timeout time.Duration) error {
+        done := make(chan struct{})
+        go func() {
+          tm.wg.Wait()
+          close(done)
+        }()
+
+        select {
+        case <-done:
+          return nil
+        case <-time.After(timeout):
+          return fmt.Errorf("timeout waiting for %d tasks", len(tm.runningTasks))
+        }
+      }
+      ```
+
+      The complete architecture follows a clear layering:
+
+      1. **ActionInterface** — defines the contract any action must fulfill
+      2. **Action[T]** — wraps implementations with lifecycle management and timing
+      3. **GlobalContext** — thread-safe store for inter-action and inter-task data flow
+      4. **ActionParameter** — declarative runtime parameter resolution against the global context
+      5. **Task** — sequential action pipeline with cancellation and validation
+      6. **TaskManager** — concurrent task execution with goroutine-per-task and graceful shutdown

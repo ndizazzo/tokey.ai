@@ -1,0 +1,25 @@
+id: multimodal
+name: Multimodal
+description: Handles both text and images, slower prefill from vision encoder
+category: model
+reasoningEffort: off
+reasoningStyle: streamed
+
+tokensPerSec: 55
+ttft: 400
+prefillTps: 20000
+jitter: 12
+completionLength: 400
+promptLength: 32768
+networkVariability: false
+
+cadence:
+  stepSize: 3
+  intraStepDelay: 1
+  interStepDelay: 45
+
+stalls:
+  enabled: true
+  probabilityPerSecond: 0.06
+  minDuration: 200
+  maxDuration: 800

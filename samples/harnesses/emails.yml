@@ -5,45 +5,46 @@ tooltip: Structured business communication with clear action items and professio
 
 stages:
   - prompt: >-
-      Draft a follow-up email to the product team about our Q4 roadmap progress. We completed the
-      user research phase with 100 interviews, prototype testing showed a 23% improvement in task
-      completion, and the engineering spike on migration strategy is scheduled for next sprint. Ask
-      them to review the attached deck and come prepared for Friday's sync. Keep it concise and
-      professional, sign off as Alex.
+      Draft a follow-up email to the product team about our Q4 roadmap progress.
+      We completed the user research phase with 100 interviews, prototype
+      testing showed a 23% improvement in task completion, and the engineering
+      spike on migration strategy is scheduled for next sprint. Ask them to
+      review the attached deck and come prepared for Friday's sync. Keep it
+      concise and professional, sign off as Alex.
     thinkingText: >-
-      This should be concise, professional, and action-oriented so the main decisions and next steps
-      are easy to scan. Bullet points for the three data points, then a clear ask with a deadline
-      anchor.
+      This should be concise, professional, and action-oriented so the main
+      decisions and next steps are easy to scan. Bullet points for the three
+      data points, then a clear ask with a deadline anchor.
     responseText: |
       Subject: Q4 Roadmap — Progress Update & Friday Sync Prep
 
       Hi Team,
 
-      Following up on our discussion from last week, I wanted to share the latest updates on the Q4
-      roadmap:
+      Following up on our discussion from last week, I wanted to share the latest updates on the Q4 roadmap:
 
       • User research phase completed — 100 interviews across three segments
       • Prototype testing showing 23% improvement in task completion rates
       • Engineering spike on migration strategy scheduled for next sprint
 
-      Please review the attached deck before Friday. Come prepared with questions or concerns — we
-      will need to lock scope by end of week so engineering can begin sprint planning.
+      Please review the attached deck before Friday. Come prepared with questions or concerns — we will need to lock scope by end of week so engineering can begin sprint planning.
 
-      If anything in the data surprises you or contradicts your assumptions, flag it in the
-      #q4-roadmap channel so we can address it before the sync.
+      If anything in the data surprises you or contradicts your assumptions, flag it in the #q4-roadmap channel so we can address it before the sync.
 
       Best regards,
       Alex
 
   - prompt: >-
-      Now draft a separate email to the VP of Engineering summarizing the same Q4 updates but angled
-      toward a resourcing ask. We need two additional senior engineers for the migration sprint
-      starting in three weeks. Include the data points from the team email, frame it as a staffing
-      request with clear justification, and propose a 15-minute slot to discuss. Same sign-off.
+      Now draft a separate email to the VP of Engineering summarizing the same
+      Q4 updates but angled toward a resourcing ask. We need two additional
+      senior engineers for the migration sprint starting in three weeks. Include
+      the data points from the team email, frame it as a staffing request with
+      clear justification, and propose a 15-minute slot to discuss. Same
+      sign-off.
     thinkingText: >-
-      This needs a different tone — more strategic, less operational. The data points should support
-      the staffing ask rather than being the focus. I need to frame the two engineers as an investment
-      with a clear return, reference the timeline pressure, and make the ask easy to approve.
+      This needs a different tone — more strategic, less operational. The data
+      points should support the staffing ask rather than being the focus. I need
+      to frame the two engineers as an investment with a clear return, reference
+      the timeline pressure, and make the ask easy to approve.
     responseText: |
       Subject: Staffing Request — Two Senior Engineers for Q4 Migration Sprint
 
@@ -51,22 +52,16 @@ stages:
 
       Wanted to flag an upcoming resourcing need for the Q4 migration workstream.
 
-      Context: Our prototype testing validated the new architecture with a 23% improvement in task
-      completion across 100 user interviews. The data is strong enough to move forward, and we have
-      an engineering spike on migration strategy kicking off next sprint.
+      Context: Our prototype testing validated the new architecture with a 23% improvement in task completion across 100 user interviews. The data is strong enough to move forward, and we have an engineering spike on migration strategy kicking off next sprint.
 
-      The ask: We need two additional senior engineers allocated to the migration squad starting the
-      week of the 28th. The spike will produce the technical plan, but execution requires dedicated
-      capacity — particularly around data layer refactoring and API versioning. Without the headcount,
-      we risk pushing the migration into Q1 and losing the momentum from the research phase.
+      The ask: We need two additional senior engineers allocated to the migration squad starting the week of the 28th. The spike will produce the technical plan, but execution requires dedicated capacity — particularly around data layer refactoring and API versioning. Without the headcount, we risk pushing the migration into Q1 and losing the momentum from the research phase.
 
       Timeline:
       • Sprint 1 (next sprint): Architecture spike — covered by current team
       • Sprint 2–4: Migration execution — requires +2 senior engineers
       • Target completion: End of Q4
 
-      I have put together a one-page breakdown of the workstreams and skill requirements (attached).
-      Would 15 minutes on your calendar this week work to walk through it?
+      I have put together a one-page breakdown of the workstreams and skill requirements (attached). Would 15 minutes on your calendar this week work to walk through it?
 
       Best regards,
       Alex

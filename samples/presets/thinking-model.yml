@@ -1,11 +1,13 @@
 id: thinking-model
-name: Thinking Model
-description: Reasoning model with long TTFT
+name: Reasoning Model
+description: Thinks before answering, high base latency
 category: model
-thinkingEnabled: true
+reasoningEffort: high
+reasoningStyle: streamed
 
 tokensPerSec: 30
-ttft: 5000
+ttft: 3000
+prefillTps: 40000
 jitter: 12
 completionLength: 800
 promptLength: 131072

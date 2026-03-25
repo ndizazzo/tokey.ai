@@ -1,11 +1,13 @@
 id: standard-api
 name: Standard API
-description: Cloud API (OpenAI, Anthropic)
+description: Cloud API (OpenAI, Gemini, Anthropic, etc.)
 category: api
-thinkingEnabled: true
+reasoningEffort: medium
+reasoningStyle: streamed
 
 tokensPerSec: 60
-ttft: 500
+ttft: 300
+prefillTps: 60000
 jitter: 15
 completionLength: 500
 promptLength: 131072

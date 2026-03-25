@@ -2,10 +2,12 @@ id: gpu-pro
 name: RTX Pro 6000
 description: 96 GB
 category: gpu
-thinkingEnabled: true
+reasoningEffort: medium
+reasoningStyle: streamed
 
 tokensPerSec: 150
-ttft: 100
+ttft: 50
+prefillTps: 80000
 jitter: 3
 completionLength: 800
 promptLength: 262144

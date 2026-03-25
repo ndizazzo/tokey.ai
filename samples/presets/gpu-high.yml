@@ -2,10 +2,12 @@ id: gpu-high
 name: RTX 5090
 description: 32 GB
 category: gpu
-thinkingEnabled: true
+reasoningEffort: medium
+reasoningStyle: streamed
 
 tokensPerSec: 100
-ttft: 400
+ttft: 100
+prefillTps: 25000
 jitter: 6
 completionLength: 500
 promptLength: 65536

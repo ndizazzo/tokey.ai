@@ -2,10 +2,12 @@ id: gpu-h100
 name: H100
 description: 80 GB
 category: gpu
-thinkingEnabled: true
+reasoningEffort: medium
+reasoningStyle: streamed
 
 tokensPerSec: 200
-ttft: 80
+ttft: 40
+prefillTps: 150000
 jitter: 2
 completionLength: 1000
 promptLength: 524288

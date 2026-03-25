@@ -5,12 +5,14 @@ tooltip: Casual, friendly tone with natural contractions and conversational flow
 
 stages:
   - prompt: >-
-      Hey, I've been hearing a lot about TypeScript lately. How do I actually get started with it?
-      I'm a JavaScript developer but I've never used TS before.
+      Hey, I've been hearing a lot about TypeScript lately. How do I actually
+      get started with it? I'm a JavaScript developer but I've never used TS
+      before.
     thinkingText: >-
-      The tone should stay friendly and direct, with just enough detail to be helpful without sounding
-      stiff. Since they already know JavaScript, I can skip the basics and focus on TypeScript-specific
-      setup and the most impactful first step.
+      The tone should stay friendly and direct, with just enough detail to be
+      helpful without sounding stiff. Since they already know JavaScript, I can
+      skip the basics and focus on TypeScript-specific setup and the most
+      impactful first step.
     responseText: |
       Oh totally! So the easiest way to get started with TypeScript is just to install it globally:
 
@@ -18,8 +20,7 @@ stages:
       npm install -g typescript
       ```
 
-      Then you can create a `tsconfig.json` file in your project root. Don't worry about getting every
-      option right — the defaults are pretty sensible. The main one to turn on is `strict` mode:
+      Then you can create a `tsconfig.json` file in your project root. Don't worry about getting every option right — the defaults are pretty sensible. The main one to turn on is `strict` mode:
 
       ```json
       {
@@ -32,20 +33,19 @@ stages:
       }
       ```
 
-      After that, just rename a `.js` file to `.ts` and start adding types. TypeScript will infer a
-      lot for you, so you don't have to annotate everything on day one. Start with function parameters
-      and return types — that's where you get the most bang for your buck.
+      After that, just rename a `.js` file to `.ts` and start adding types. TypeScript will infer a lot for you, so you don't have to annotate everything on day one. Start with function parameters and return types — that's where you get the most bang for your buck.
 
   - prompt: >-
-      Ok that makes sense. What about setting up a project from scratch though? Like if I want to
-      use it with React and have a real dev server with hot reload and everything?
+      Ok that makes sense. What about setting up a project from scratch though?
+      Like if I want to use it with React and have a real dev server with hot
+      reload and everything?
     thinkingText: >-
-      They want a practical project setup, not just compiler basics. Vite is the standard choice for
-      React + TypeScript — fast dev server, minimal config, good defaults. I should give them the
-      commands and explain the project structure so they know where everything lives.
+      They want a practical project setup, not just compiler basics. Vite is the
+      standard choice for React + TypeScript — fast dev server, minimal config,
+      good defaults. I should give them the commands and explain the project
+      structure so they know where everything lives.
     responseText: |
-      For a React + TypeScript project, Vite is the way to go these days. One command gets you the
-      whole setup:
+      For a React + TypeScript project, Vite is the way to go these days. One command gets you the whole setup:
 
       ```bash
       npm create vite@latest my-app -- --template react-ts
@@ -54,8 +54,7 @@ stages:
       npm run dev
       ```
 
-      That gives you React 19, TypeScript, hot module replacement, and a dev server out of the box.
-      The project structure looks like:
+      That gives you React 19, TypeScript, hot module replacement, and a dev server out of the box. The project structure looks like:
 
       ```
       my-app/
@@ -67,22 +66,20 @@ stages:
         vite.config.ts  — Vite config (also TypeScript!)
       ```
 
-      The `.tsx` extension tells TypeScript that the file contains JSX. One thing that trips people
-      up: if you're coming from plain React, your event handlers now need types. Instead of `(e) => ...`
-      you'll write `(e: React.MouseEvent) => ...`. But honestly, just hover over things in VS Code and
-      it'll tell you what type to use — TypeScript's editor integration is the real killer feature.
+      The `.tsx` extension tells TypeScript that the file contains JSX. One thing that trips people up: if you're coming from plain React, your event handlers now need types. Instead of `(e) => ...` you'll write `(e: React.MouseEvent) => ...`. But honestly, just hover over things in VS Code and it'll tell you what type to use — TypeScript's editor integration is the real killer feature.
 
   - prompt: >-
-      One more thing — everyone keeps talking about Zod for validation. How does that work with
-      TypeScript? Like why not just use TypeScript types directly?
+      One more thing — everyone keeps talking about Zod for validation. How does
+      that work with TypeScript? Like why not just use TypeScript types
+      directly?
     thinkingText: >-
-      This is a common confusion point. The key insight is that TypeScript types are erased at runtime —
-      they cannot validate external data. Zod bridges that gap by providing runtime validation that also
-      generates TypeScript types. A concrete before-and-after example will make the distinction clear.
+      This is a common confusion point. The key insight is that TypeScript types
+      are erased at runtime — they cannot validate external data. Zod bridges
+      that gap by providing runtime validation that also generates TypeScript
+      types. A concrete before-and-after example will make the distinction
+      clear.
     responseText: |
-      Great question — this is one of those things that clicks once you see it. TypeScript types only
-      exist at compile time. They get completely erased when your code runs. So if you get data from
-      an API or a form submission, TypeScript just trusts whatever you tell it:
+      Great question — this is one of those things that clicks once you see it. TypeScript types only exist at compile time. They get completely erased when your code runs. So if you get data from an API or a form submission, TypeScript just trusts whatever you tell it:
 
       ```ts
       type User = { name: string; age: number };
@@ -101,17 +98,17 @@ stages:
         age: z.number().int().positive(),
       });
 
+      // Infer the TypeScript type from the schema
       type User = z.infer<typeof UserSchema>;
 
+      // Now you get REAL validation at runtime
       const result = UserSchema.safeParse(apiResponse);
       if (result.success) {
-        console.log(result.data.name); // typed as User AND validated
+        // result.data is typed as User AND guaranteed to match
+        console.log(result.data.name);
       } else {
         console.error(result.error.issues);
       }
       ```
 
-      The mental model is: TypeScript checks your code, Zod checks your data. You use TypeScript for
-      internal type safety and Zod at the boundaries — API responses, form inputs, environment
-      variables, anything that comes from the outside world. They work together really well because
-      `z.infer` means you never have to write the type twice.
+      The mental model is: TypeScript checks your code, Zod checks your data. You use TypeScript for internal type safety and Zod at the boundaries — API responses, form inputs, environment variables, anything that comes from the outside world. They work together really well because `z.infer` means you never have to write the type twice.

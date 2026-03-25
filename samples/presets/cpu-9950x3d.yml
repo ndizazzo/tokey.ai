@@ -1,22 +1,22 @@
-id: cpu-threadripper
-name: Threadripper Pro
-description: 768 GB
+id: cpu-9950x3d
+name: Ryzen 9 9950X3D
+description: 128 GB
 category: cpu
 reasoningEffort: medium
 reasoningStyle: streamed
 
-tokensPerSec: 45
-ttft: 200
-prefillTps: 12000
-jitter: 3
-completionLength: 800
-promptLength: 262144
+tokensPerSec: 28
+ttft: 300
+prefillTps: 5000
+jitter: 4
+completionLength: 600
+promptLength: 131072
 networkVariability: false
 
 cadence:
-  stepSize: 4
+  stepSize: 3
   intraStepDelay: 1
-  interStepDelay: 22
+  interStepDelay: 36
 
 stalls:
   enabled: false

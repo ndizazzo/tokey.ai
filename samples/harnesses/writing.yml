@@ -1,73 +1,53 @@
 id: writing
 name: Creative Writing
-description: Simulates essay, article, or story generation
+description: Simulates article or story generation
 tooltip: Flowing prose with natural sentence variation and descriptive language
 
 stages:
   - prompt: >-
-      Write the opening of a literary short story about a woman named Elena stepping outside on an
-      autumn morning in Paris. Focus on sensory details — the light, the smells, the feel of the
-      season. Two paragraphs, atmospheric and unhurried.
+      Write the opening of a literary short story about a woman named Elena
+      stepping outside on an autumn morning in Paris. Focus on sensory details —
+      the light, the smells, the feel of the season. Two paragraphs, atmospheric
+      and unhurried.
     thinkingText: >-
-      I want the prose to feel deliberate and atmospheric, with enough sensory rhythm to make the
-      scene feel lived in. I should ground it in concrete details rather than abstractions — the
-      quality of light, the textures underfoot, the small sounds of a city waking up.
+      I want the prose to feel deliberate and atmospheric, with enough sensory
+      rhythm to make the scene feel lived in. I should ground it in concrete
+      details rather than abstractions — the quality of light, the textures
+      underfoot, the small sounds of a city waking up.
     responseText: |
-      The morning sun cast long shadows across the cobblestone street as Elena stepped out of her
-      apartment. She paused at the threshold, breathing in the damp air that carried the faint
-      sweetness of fallen leaves and fresh bread from the boulangerie two doors down. The light at
-      this hour was particular to October — thin and golden, catching the ironwork balconies above
-      in a way that made the whole street look like a faded photograph of itself.
+      The morning sun cast long shadows across the cobblestone street as Elena stepped out of her apartment. She paused at the threshold, breathing in the damp air that carried the faint sweetness of fallen leaves and fresh bread from the boulangerie two doors down. The light at this hour was particular to October — thin and golden, catching the ironwork balconies above in a way that made the whole street look like a faded photograph of itself.
 
-      Paris in autumn was a particular kind of magic. The air carried the scent of roasted chestnuts
-      from corner vendors, while leaves curled gold and crimson beneath her boots. A cyclist passed
-      silently, tires hissing on the wet stones. Elena pulled her coat tighter, not because she was
-      cold, but because the gesture felt right — a small act of settling into the day.
+      Paris in autumn was a particular kind of magic. The air carried the scent of roasted chestnuts from corner vendors, while leaves curled gold and crimson beneath her boots. A cyclist passed silently, tires hissing on the wet stones. Elena pulled her coat tighter, not because she was cold, but because the gesture felt right — a small act of settling into the day.
 
   - prompt: >-
-      Continue the story. Elena enters a café she has never noticed before. The owner seems to
-      recognize her though she is certain they have never met. Build the tension through small details
-      rather than dialogue — gestures, objects, the quality of the light inside. Two or three
-      paragraphs.
+      Continue the story. Elena enters a café she has never noticed before. The
+      owner seems to recognize her though she is certain they have never met.
+      Build the tension through small details rather than dialogue — gestures,
+      objects, the quality of the light inside. Two or three paragraphs.
     thinkingText: >-
-      I need to shift the tone from contemplative to subtly unsettling without breaking the
-      atmospheric register. The café should feel both inviting and slightly wrong. I will rely on
-      sensory incongruities — objects that are too precise, a proprietor who knows too much — rather
-      than explicit strangeness.
+      I need to shift the tone from contemplative to subtly unsettling without
+      breaking the atmospheric register. The café should feel both inviting and
+      slightly wrong. I will rely on sensory incongruities — objects that are
+      too precise, a proprietor who knows too much — rather than explicit
+      strangeness.
     responseText: |
-      She had walked this block a thousand times, but the café on the corner of Rue des Barres was
-      new to her — or perhaps it had always been there, hiding behind the plane tree whose branches
-      now scraped the awning like slow fingers. The door was heavier than it looked. Inside, the air
-      was thick with the smell of cardamom and old paper, and the light fell in amber shafts through
-      windows that seemed too tall for the building.
+      She had walked this block a thousand times, but the café on the corner of Rue des Barres was new to her — or perhaps it had always been there, hiding behind the plane tree whose branches now scraped the awning like slow fingers. The door was heavier than it looked. Inside, the air was thick with the smell of cardamom and old paper, and the light fell in amber shafts through windows that seemed too tall for the building.
 
-      The proprietor, a man with deep-set eyes and ink-stained hands, looked up from behind the
-      counter and smiled as if resuming a conversation. He set a cup on the saucer before she had
-      ordered — café crème, no sugar — and placed it on the zinc bar with the quiet confidence of
-      someone returning a borrowed thing. Elena opened her mouth to correct him, then stopped. The
-      coffee was exactly right.
+      The proprietor, a man with deep-set eyes and ink-stained hands, looked up from behind the counter and smiled as if resuming a conversation. He set a cup on the saucer before she had ordered — café crème, no sugar — and placed it on the zinc bar with the quiet confidence of someone returning a borrowed thing. Elena opened her mouth to correct him, then stopped. The coffee was exactly right.
 
-      She sat at a table near the window. On its surface, someone had scratched a small constellation
-      of marks into the wood — not vandalism, but something deliberate, almost like notation. The cup
-      warmed her hands. Through the glass, the street she had always known looked subtly rearranged,
-      as though the café had shifted her a few degrees off the axis of her ordinary life.
+      She sat at a table near the window. On its surface, someone had scratched a small constellation of marks into the wood — not vandalism, but something deliberate, almost like notation. The cup warmed her hands. Through the glass, the street she had always known looked subtly rearranged, as though the café had shifted her a few degrees off the axis of her ordinary life.
 
   - prompt: >-
-      Bring the scene to a close. Elena leaves the café carrying something she did not have before —
-      not a physical object, but a shift in perspective or understanding. End with an image that
-      echoes the autumn opening, one that feels both final and open.
+      Bring the scene to a close. Elena leaves the café carrying something she
+      did not have before — not a physical object, but a shift in perspective or
+      understanding. End with an image that echoes the autumn opening, one that
+      feels both final and open.
     thinkingText: >-
-      The resolution should feel internal and earned rather than explained. The closing image needs
-      to rhyme with the opening — autumn, light, the street — but refracted through whatever Elena
-      gained inside the café. I should resist the urge to make the ending too neat or too mystical.
+      The resolution should feel internal and earned rather than explained. The
+      closing image needs to rhyme with the opening — autumn, light, the street
+      — but refracted through whatever Elena gained inside the café. I should
+      resist the urge to make the ending too neat or too mystical.
     responseText: |
-      She left no money on the table. The proprietor did not ask for any. At the door he simply
-      nodded, the way you nod at someone departing on a journey you know the route of, and Elena
-      stepped back into the street with the strange certainty that she had been given permission for
-      something she had not known she was waiting to begin.
+      She left no money on the table. The proprietor did not ask for any. At the door he simply nodded, the way you nod at someone departing on a journey you know the route of, and Elena stepped back into the street with the strange certainty that she had been given permission for something she had not known she was waiting to begin.
 
-      The light had shifted while she was inside. The sun sat lower now, and the shadows of the plane
-      trees stretched long and intricate across the cobblestones like the notation scratched into the
-      café table. A chestnut fell from somewhere above and split open on the pavement, its dark seed
-      glossy and new. Elena walked on without looking back, her boots finding a rhythm she did not
-      remember choosing, carrying her toward the river and whatever autumn would ask of her next.
+      The light had shifted while she was inside. The sun sat lower now, and the shadows of the plane trees stretched long and intricate across the cobblestones like the notation scratched into the café table. A chestnut fell from somewhere above and split open on the pavement, its dark seed glossy and new. Elena walked on without looking back, her boots finding a rhythm she did not remember choosing, carrying her toward the river and whatever autumn would ask of her next.
